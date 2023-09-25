@@ -1,0 +1,7 @@
+export class CatsController {
+  public async getAllCats(): Promise<object[]> {
+    const cats = [{ name: 'Tom' }, { name: 'Minty' }]
+
+    return cats
+  }
+}
