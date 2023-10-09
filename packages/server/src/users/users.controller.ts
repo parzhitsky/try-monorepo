@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common'
+import { PaginationParams } from '@/common/pagination-params.dto.js'
 import { CreateUser } from './create-user.dto.js'
 import { DeleteUserByAliasReqBody } from './delete-user-by-alias-req-body.dto.js'
 import { GetUserByAliasReqParams } from './get-user-by-alias-req-params.dto.js'
@@ -12,11 +13,14 @@ export class UsersController {
   ) {}
 
   @Get('/')
-  async getUsers(): Promise<Api.HttpResponseBody<User[]>> {
-    const users = await this.usersService.getUsers()
+  async getUsers(
+    @Query() { offset, limit }: PaginationParams,
+  ): Promise<Api.HttpResponseBodyListPaginated<User>> {
+    const { items, pagination } = await this.usersService.getUsers({ limit, offset })
 
     return {
-      result: users,
+      result: items,
+      pagination,
     }
   }
 

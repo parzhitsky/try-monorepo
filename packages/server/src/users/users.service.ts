@@ -1,9 +1,32 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { type FindOptionsRelations, ILike, Repository } from 'typeorm'
+import { type ListPaginated } from '@@shared/pagination/list-paginated.type.js'
 import { ClientError } from '@/app/app-error/app-error.js'
+import { type PaginationParams } from '@/common/pagination-params.dto.js'
 import { type CreateUser } from './create-user.dto.js'
 import { User } from './user.entity.js'
+
+export const GET_USERS_DEFAULT_OFFSET = 0
+
+export const GET_USERS_DEFAULT_LIMIT = 20
+
+/** @private */
+const userStuffings = {
+  bare: {
+    comments: false,
+    posts: false,
+  },
+  full: {
+    comments: true,
+    posts: true,
+  },
+} satisfies Record<string, FindOptionsRelations<User>>
+
+/** @private */
+interface FindUserByAliasParams {
+  readonly stuffing?: keyof typeof userStuffings
+}
 
 export interface UserDataDeletionConfirmations {
   readonly confirmDeleteOwnPosts?: true
@@ -17,19 +40,47 @@ export class UsersService {
     protected readonly usersRepo: Repository<User>,
   ) {}
 
-  async getUsers(): Promise<User[]> {
-    const users = await this.usersRepo.find()
+  async getUsers({
+    offset = GET_USERS_DEFAULT_OFFSET,
+    limit = GET_USERS_DEFAULT_LIMIT,
+  }: PaginationParams): Promise<ListPaginated<User>> {
+    const [items, totalCount] = await this.usersRepo.findAndCount({
+      skip: offset,
+      take: limit,
+    })
 
-    return users
+    return {
+      items,
+      pagination: {
+        limit,
+        offset,
+        totalCount,
+      },
+    }
+  }
+
+  protected async findUserByAlias(alias: string, {
+    stuffing: stuffingName = 'bare',
+  }: FindUserByAliasParams = {}): Promise<User | null> {
+    const user = await this.usersRepo.findOne({
+      where: {
+        alias: ILike(alias),
+      },
+      relations: userStuffings[stuffingName],
+    })
+
+    return user
   }
 
   async createUser({ alias }: CreateUser): Promise<User> {
-    const userExisting = await this.usersRepo.findOne({
-      where: { alias },
-    })
+    const userExisting = await this.findUserByAlias(alias)
 
     if (userExisting != null) {
       throw new UserAliasTakenError(alias)
+        .addDetailIf(userExisting.alias !== alias, () => ({
+          public: true,
+          message: 'User alias supports both uppercase and lowercase letters, but their comparison is case-insensitive (e.g., "John" is the same as "john")',
+        }))
     }
 
     const user = this.usersRepo.create({ alias })
@@ -40,13 +91,7 @@ export class UsersService {
   }
 
   async getExistingUserByAlias(alias: string): Promise<User> {
-    const user = await this.usersRepo.findOne({
-      where: { alias },
-      relations: {
-        comments: true,
-        posts: true,
-      },
-    })
+    const user = await this.findUserByAlias(alias, { stuffing: 'full' })
 
     if (user == null) {
       throw new UserNotFoundByAliasError(alias)
@@ -55,17 +100,20 @@ export class UsersService {
     return user
   }
 
-  async assertUserDataDeletionIsConfirmed(confirmations: UserDataDeletionConfirmations): Promise<void> {
-    if (!confirmations.confirmDeleteOwnComments || !confirmations.confirmDeleteOwnPosts) {
+  async assertUserDataDeletionIsConfirmed({
+    confirmDeleteOwnComments,
+    confirmDeleteOwnPosts,
+  }: UserDataDeletionConfirmations): Promise<void> {
+    if (!confirmDeleteOwnComments || !confirmDeleteOwnPosts) {
       throw new UserDataDeletionIsNotConfirmedError()
-        .addDetail({
+        .addDetailIf(!confirmDeleteOwnComments, () => ({
           public: true,
           message: 'Request body must include "confirmDeleteOwnComments: true" to confirm deletion of user\'s own comments',
-        })
-        .addDetail({
+        }))
+        .addDetailIf(!confirmDeleteOwnPosts, () => ({
           public: true,
-          message: 'Request body must include "confirmDeleteOwnPosts: true" to confirm deletion of user\'s own posts. Please note that deleting a post also deletes its comments, both own and not',
-        })
+          message: 'Request body must include "confirmDeleteOwnPosts: true" to confirm deletion of user\'s own posts. Please note that deleting a post also deletes all of its comments (whether own or not)',
+        }))
     }
   }
 
@@ -84,7 +132,7 @@ export class UserAliasTakenError extends ClientError {
   constructor(
     public readonly alias: string,
   ) {
-    super(`User with alias "${alias}" already exists, try another one`)
+    super(`User with an alias similar to "${alias}" already exists, try another one`)
   }
 }
 
