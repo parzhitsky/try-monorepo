@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { ClientError } from '@/app/app-error/app-error.js'
 import { type Post } from '@/posts/post.entity.js'
 import { type User } from '@/users/user.entity.js'
 import { Comment } from './comment.entity.js'
-import { ClientError } from '@/app/app-error/app-error.js'
 
 /** @private */
 interface CreateCommentParams {
