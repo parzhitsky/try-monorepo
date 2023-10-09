@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post as HttpPost, Param } from '@nestjs/common'
+import { Body, Controller, Get, Post as HttpPost, Param, Query } from '@nestjs/common'
+import { PaginationParams } from '@/common/pagination-params.dto.js'
 import { UsersService } from '@/users/users.service.js'
 import { CreatePostReqBody } from './create-post-req-body.dto.js'
 import { GetPostByIdReqParams } from './get-post-by-id-req-params.dto.js'
@@ -13,11 +14,14 @@ export class PostsController {
   ) {}
 
   @Get('/')
-  async getPosts(): Promise<Api.HttpResponseBody<Post[]>> {
-    const posts = await this.postsService.getPosts()
+  async getPosts(
+    @Query() { offset, limit }: PaginationParams,
+  ): Promise<Api.HttpResponseBodyListPaginated<Post>> {
+    const { items, pagination } = await this.postsService.getPosts({ offset, limit })
 
     return {
-      result: posts,
+      result: items,
+      pagination,
     }
   }
 
