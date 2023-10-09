@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { type ListPaginated } from '@@shared/pagination/list-paginated.type.js'
 import { ClientError } from '@/app/app-error/app-error.js'
+import { type PaginationParams } from '@/common/pagination-params.dto.js'
 import { type Post } from '@/posts/post.entity.js'
 import { type User } from '@/users/user.entity.js'
 import { Comment } from './comment.entity.js'
+
+export const GET_COMMENTS_DEFAULT_OFFSET = 0
+
+export const GET_COMMENTS_DEFAULT_LIMIT = 0
 
 /** @private */
 interface CreateCommentParams {
@@ -20,14 +26,26 @@ export class CommentsService {
     protected readonly commentsRepo: Repository<Comment>,
   ) {}
 
-  async getComments(): Promise<Comment[]> {
-    const comments = await this.commentsRepo.find({
+  async getComments({
+    offset = GET_COMMENTS_DEFAULT_OFFSET,
+    limit = GET_COMMENTS_DEFAULT_LIMIT,
+  }: PaginationParams): Promise<ListPaginated<Comment>> {
+    const [items, totalCount] = await this.commentsRepo.findAndCount({
       relations: {
         author: true,
       },
+      skip: offset,
+      take: limit,
     })
 
-    return comments
+    return {
+      items,
+      pagination: {
+        offset,
+        limit,
+        totalCount,
+      },
+    }
   }
 
   async createComment({ author, post, content }: CreateCommentParams): Promise<Comment> {

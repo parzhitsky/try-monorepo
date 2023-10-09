@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common'
+import { PaginationParams } from '@/common/pagination-params.dto.js'
 import { PostsService } from '@/posts/posts.service.js'
 import { UsersService } from '@/users/users.service.js'
 import { type Comment } from './comment.entity.js'
@@ -15,11 +16,14 @@ export class CommentsController {
   ) {}
 
   @Get('/')
-  async getComments(): Promise<Api.HttpResponseBody<Comment[]>> {
-    const comments = await this.commentsService.getComments()
+  async getComments(
+    @Query() { offset, limit }: PaginationParams,
+  ): Promise<Api.HttpResponseBodyListPaginated<Comment>> {
+    const { items, pagination } = await this.commentsService.getComments({ offset, limit })
 
     return {
-      result: comments,
+      result: items,
+      pagination,
     }
   }
 
