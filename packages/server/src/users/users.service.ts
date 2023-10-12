@@ -77,10 +77,10 @@ export class UsersService {
 
     if (userExisting != null) {
       throw new UserAliasTakenError(alias)
-        .addDetailIf(userExisting.alias !== alias, () => ({
+        .addDetail({
           public: true,
           message: 'User alias supports both uppercase and lowercase letters, but their comparison is case-insensitive (e.g., "John" is the same as "john")',
-        }))
+        })
     }
 
     const user = this.usersRepo.create({ alias })
