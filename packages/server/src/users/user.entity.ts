@@ -10,7 +10,7 @@ export const INVALID_ALIAS_MESSAGE =
 @Entity({
   name: 'user',
 })
-export class User {
+export class User implements Api.User {
   @PrimaryGeneratedColumn('uuid', {
     name: 'user_id',
   })

@@ -7,7 +7,7 @@ export const CONTENT_MAX_LENGTH = 255
 @Entity({
   name: 'post',
 })
-export class Post {
+export class Post implements Api.Post {
   @PrimaryGeneratedColumn('uuid', {
     name: 'post_id',
   })
