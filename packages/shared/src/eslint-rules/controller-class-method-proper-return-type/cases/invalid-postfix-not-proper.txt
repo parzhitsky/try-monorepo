@@ -1,0 +1,9 @@
+export class CatsApi {
+  public async getAllCats(): Promise<Api.HttpResponseBody<object[]>> {
+    const cats = [{ name:'Tom' }, { name: 'Minty' }]
+
+    return {
+      result: cats,
+    }
+  }
+}
