@@ -1,0 +1,29 @@
+name: Notify when a new '/packages/**/node_modules' directory appears
+
+on:
+  push:
+    paths:
+      - '**/package*.json'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '/.nvmrc'
+
+      - run: npm ci
+
+      - name: Find nested 'node_modules' dirs
+        run: |2
+          directories=$(find packages -type d -name 'node_modules' | tr -d '[:space:]')
+
+          if [ -n "$directories" ]; then
+            echo ⛔️ "Error: Found nested 'node_modules' directories:"
+            echo $directories
+            exit 1
+          else
+            echo ✅ "No nested 'node_modules' directories found."
+          fi
