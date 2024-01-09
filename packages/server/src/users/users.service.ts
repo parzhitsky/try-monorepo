@@ -79,7 +79,7 @@ export class UsersService {
       throw new UserAliasTakenError(alias)
         .addDetail({
           public: true,
-          message: 'User alias supports both uppercase and lowercase letters, but their comparison is case-insensitive (e.g., "John" is the same as "john")',
+          message: 'User alias supports both uppercase and lowercase letters, but their comparison is case-insensitive (e.g., cannot create "mia" if "Mia" exists)',
         })
     }
 
