@@ -15,5 +15,8 @@
       "./tsconfig.json",
       "./tsconfig.external.json"
     ]
+  },
+  "rules": {
+    "@typescript-eslint/no-throw-literal": "off"
   }
 }
