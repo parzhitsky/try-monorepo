@@ -100,10 +100,10 @@ export class UsersService {
     return user
   }
 
-  async assertUserDataDeletionIsConfirmed({
+  assertUserDataDeletionIsConfirmed({
     confirmDeleteOwnComments,
     confirmDeleteOwnPosts,
-  }: UserDataDeletionConfirmations): Promise<void> {
+  }: UserDataDeletionConfirmations): void {
     if (!confirmDeleteOwnComments || !confirmDeleteOwnPosts) {
       throw new UserDataDeletionIsNotConfirmedError()
         .addDetailIf(!confirmDeleteOwnComments, () => ({

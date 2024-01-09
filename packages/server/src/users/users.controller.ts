@@ -51,7 +51,7 @@ export class UsersController {
     @Param() params: GetUserByAliasReqParams,
     @Body() confirmations: DeleteUserByAliasReqBody,
   ): Promise<Api.HttpResponseBody<User>> {
-    await this.usersService.assertUserDataDeletionIsConfirmed(confirmations)
+    this.usersService.assertUserDataDeletionIsConfirmed(confirmations)
 
     const user = await this.usersService.deleteExistingUserByAlias(params.userAlias)
 
