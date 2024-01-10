@@ -16,10 +16,12 @@ const userStuffings = {
   bare: {
     comments: false,
     posts: false,
+    purchases: false,
   },
   full: {
     comments: true,
     posts: true,
+    purchases: true,
   },
 } satisfies Record<string, FindOptionsRelations<User>>
 
@@ -35,6 +37,8 @@ export interface UserDataDeletionConfirmations {
 
 @Injectable()
 export class UsersService {
+  protected readonly newUserInitialCredit: number = 0.3
+
   constructor(
     @InjectRepository(User)
     protected readonly usersRepo: Repository<User>,
@@ -83,7 +87,10 @@ export class UsersService {
         })
     }
 
-    const user = this.usersRepo.create({ alias })
+    const user = this.usersRepo.create({
+      alias,
+      credit: this.newUserInitialCredit,
+    })
 
     await this.usersRepo.save(user)
 

@@ -28,6 +28,7 @@
     "@nestjs/typeorm": "10.0.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.0",
+    "decimal.js": "10.4.3",
     "express-rate-limit": "7.1.5",
     "morgan": "1.10.0",
     "object-hash": "^3.0.0",

@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, type Relation } from 'typeorm'
 import { Comment } from '@/comments/comment.entity.js'
+import { type Decimal, DecimalTransformer } from '@/db/decimal-transformer.js'
 import { Post } from '@/posts/post.entity.js'
+import { Purchase } from './purchase.entity.js'
 
 export const aliasPattern = /^[a-z_][a-z_\d-]*$/i
 
@@ -23,10 +25,24 @@ export class User implements Api.User {
   })
   readonly alias!: string
 
+  @Column({
+    name: 'user_credit',
+    type: 'decimal',
+    precision: 18,
+    scale: 4,
+    nullable: false,
+    transformer: new DecimalTransformer(),
+    default: () => '(0)',
+  })
+  credit!: Decimal
+
   // ***
 
   @OneToMany(() => Post, post => post.author)
   readonly posts!: Array<Relation<Post>>
+
+  @OneToMany(() => Purchase, (purchase) => purchase.user)
+  readonly purchases!: Array<Relation<Purchase>>
 
   @OneToMany(() => Comment, comment => comment.author)
   readonly comments!: Array<Relation<Comment>>

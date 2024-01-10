@@ -15,6 +15,7 @@ export const GET_POSTS_DEFAULT_LIMIT = 10
 interface CreatePostParams {
   readonly author: User
   readonly content: string
+  readonly price?: number
 }
 
 @Injectable()
@@ -24,8 +25,8 @@ export class PostsService {
     protected readonly postsRepo: Repository<Post>,
   ) {}
 
-  async createPost({ author, content }: CreatePostParams): Promise<Post> {
-    const post = this.postsRepo.create({ author, content })
+  async createPost({ author, content, price }: CreatePostParams): Promise<Post> {
+    const post = this.postsRepo.create({ author, content, price })
 
     await this.postsRepo.save(post)
 
