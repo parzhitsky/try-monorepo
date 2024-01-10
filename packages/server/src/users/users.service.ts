@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { type Decimal } from 'decimal.js'
 import { type FindOptionsRelations, ILike, Repository } from 'typeorm'
 import { type ListPaginated } from '@@shared/pagination/list-paginated.type.js'
 import { ClientError } from '@/app/app-error/app-error.js'
@@ -130,6 +131,13 @@ export class UsersService {
     await this.usersRepo.remove(user)
 
     return user
+  }
+
+  /** @internal */
+  async changeUserCreditByUser(user: User, creditDelta: Decimal): Promise<void> {
+    user.credit = user.credit.plus(creditDelta)
+
+    await this.usersRepo.save(user)
   }
 }
 

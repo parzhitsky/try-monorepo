@@ -27,10 +27,10 @@ export class PostsController {
 
   @HttpPost('/')
   async createPost(
-    @Body() body: CreatePostReqBody,
+    @Body() { authorAlias, ...postProps }: CreatePostReqBody,
   ): Promise<Api.HttpResponseBody<Post>> {
-    const author = await this.usersService.getExistingUserByAlias(body.authorAlias)
-    const post = await this.postsService.createPost({ author, content: body.content })
+    const author = await this.usersService.getExistingUserByAlias(authorAlias)
+    const post = await this.postsService.createPost({ author, ...postProps })
 
     return {
       result: post,

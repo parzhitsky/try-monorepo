@@ -1,14 +1,18 @@
 import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common'
 import { PaginationParams } from '@/common/pagination-params.dto.js'
+import { CreatePurchaseReqBody } from './create-purchase-req-body.dto.js'
 import { CreateUser } from './create-user.dto.js'
 import { DeleteUserByAliasReqBody } from './delete-user-by-alias-req-body.dto.js'
 import { GetUserByAliasReqParams } from './get-user-by-alias-req-params.dto.js'
+import { type Purchase } from './purchase.entity.js'
 import { type User } from './user.entity.js'
 import { UsersService } from './users.service.js'
+import { PurchasesService } from './purchases.service.js'
 
 @Controller('users')
 export class UsersController {
   constructor(
+    protected readonly purchasesService: PurchasesService,
     protected readonly usersService: UsersService,
   ) {}
 
@@ -57,6 +61,18 @@ export class UsersController {
 
     return {
       result: user,
+    }
+  }
+
+  @Post('/:userAlias/purchases')
+  async buyPost(
+    @Param() { userAlias }: GetUserByAliasReqParams,
+    @Body() { postId }: CreatePurchaseReqBody,
+  ): Promise<Api.HttpResponseBody<Purchase>> {
+    const purchase = await this.purchasesService.createPurchase({ userAlias, postId })
+
+    return {
+      result: purchase,
     }
   }
 }
