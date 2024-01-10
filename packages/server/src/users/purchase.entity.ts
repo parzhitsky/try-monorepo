@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, Relation } from 'typeorm'
 import { Post } from '@/posts/post.entity.js'
 import { User } from './user.entity.js'
-import { Decimal, DecimalTransformer } from '@/db/decimal-transformer.js'
+import { Decimal, decimalTransformer } from '@/db/decimal-transformer.js'
 
 @Entity({
   name: 'purchase',
@@ -31,7 +31,7 @@ export class Purchase {
     scale: 4,
     nullable: false,
     update: false,
-    transformer: new DecimalTransformer(),
+    transformer: decimalTransformer,
     default: () => '(0)',
   })
   readonly price!: Decimal

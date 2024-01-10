@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, type Relation } from 'typeorm'
 import { Comment } from '@/comments/comment.entity.js'
-import { type Decimal, DecimalTransformer } from '@/db/decimal-transformer.js'
+import { type Decimal, decimalTransformer } from '@/db/decimal-transformer.js'
 import { Post } from '@/posts/post.entity.js'
 import { Purchase } from './purchase.entity.js'
 
@@ -31,7 +31,7 @@ export class User implements Api.User {
     precision: 18,
     scale: 4,
     nullable: false,
-    transformer: new DecimalTransformer(),
+    transformer: decimalTransformer,
     default: () => '(0)',
   })
   credit!: Decimal
