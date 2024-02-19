@@ -21,6 +21,8 @@ export const App: React.FC = () => {
             <Routes>
               <Route path='/home' element={<Navigate to='/' />} />
               <Route path='/' element={<Home />} />
+              {/* TODO: <Route path='/users/create-user' element={…} /> */}
+              {/* TODO: <Route path={`/users/${user.alias}`} element={…} /> */}
               <Route path='*' element={<PageNotFound />} />
             </Routes>
           </Suspense>
