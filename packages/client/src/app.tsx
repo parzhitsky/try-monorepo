@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 import { useSelector } from './store/store.js'
+import { Comment } from './modules/comment/comment.lazy.js'
 import { Home } from './modules/home/home.lazy.js'
 import { PageNotFound } from './modules/page-not-found/page-not-found.lazy.js'
 import { Loader } from './modules/common/loader/loader.js'
@@ -23,6 +24,7 @@ export const App: React.FC = () => {
               <Route path='/' element={<Home />} />
               {/* TODO: <Route path='/users/create-user' element={…} /> */}
               {/* TODO: <Route path={`/users/${user.alias}`} element={…} /> */}
+              <Route path='/comments/:commentId' element={<Comment/>} />
               <Route path='*' element={<PageNotFound />} />
             </Routes>
           </Suspense>

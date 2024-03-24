@@ -1,0 +1,108 @@
+- ✅ create home page
+- complete home page
+  - ✅ create page title
+  - ✅ create users list
+  - ✅ complete users list
+    - ✅ create list title
+    - ✅ create "create user" link
+    - ✅ create list item
+    - ✅ complete list item
+      - ✅ create user link
+    - ✅ create list pagination
+  - create posts list
+  - complete posts list
+    - ✅ create list title
+    - create list item
+    - complete list item
+      - create post link
+      - create post author link
+  - create comments list
+  - complete comments list
+    - ✅ create list title
+    - create list item
+    - complete list item
+      - create comment link
+      - create comment author link
+      - create post link
+  - ✅ create api health
+
+- create user page
+- complete user page
+  - create "back to home" link
+  - create page title
+  - create user id
+  - create user alias
+  - create posts list
+  - complete posts list
+    - create list title
+    - create "create post" link
+    - create list item
+    - complete list item
+      - create post link
+  - create comments list
+  - complete comments list
+    - create list title
+    - create list item
+    - complete list item
+      - create comment link
+      - create post link
+  - create "delete user" button
+
+- create "create user" page
+- complete "create user" page
+  - create "back to home" link
+  - create page title
+  - create "user alias" input
+  - create "create user" button
+
+- create "delete user" page
+- complete "delete user" page
+  - create "back to home" link
+  - create page title
+  - create user link
+  - create "delete all comments" checkbox
+  - create "delete all posts" checkbox
+  - create "delete user" button
+
+- create post page
+- complete post page
+  - create "back to home" link
+  - create page title
+  - create post id
+  - create author link
+  - create post body
+  - create comments list
+  - complete comments list
+    - create list title
+    - create "create comment" link
+    - create list item
+    - complete list item
+      - create comment link
+      - create comment author link
+  - create "delete post" link
+
+- create "create post" page
+- complete "create post" page
+  - create "back to home" link
+  - create "post author" input
+  - create post content
+  - create "create post" button
+
+- create comment page
+- complete comment page
+  - create "back to home" link
+  - create page title
+  - create comment id
+  - create comment author link
+  - create comment content
+  - create post link
+  - create "delete comment" button
+
+- create "create comment" page
+- complete "create comment" page
+  - create "back to home" link
+  - create page title
+  - create comment author input
+  - create post link
+  - create comment content input
+  - create "create comment" button
