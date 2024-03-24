@@ -22,7 +22,6 @@ export const UsersList: React.FC = () => {
           items={users}
           pagination={pagination}
           onNewParams={(params) => {
-            console.log(params)
             dispatch(getUsers(params))
           }}
         />

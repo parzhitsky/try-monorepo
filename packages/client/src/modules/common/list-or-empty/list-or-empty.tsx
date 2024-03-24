@@ -1,4 +1,4 @@
-import React, { type ReactNode } from 'react'
+import React from 'react'
 
 /** @private */
 interface Props<Item> {
@@ -16,7 +16,7 @@ export function ListOrEmpty<Item>({
   children: getNodeByItem,
   getKeyByItem,
   emptyText = DEFAULT_EMPTY_TEXT,
-}: Props<Item>): ReactNode {
+}: Props<Item>): React.ReactNode {
   if (items.length === 0) {
     return (
       <em>{emptyText}</em>
