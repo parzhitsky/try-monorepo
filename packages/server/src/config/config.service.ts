@@ -9,9 +9,9 @@ type ConfigKey = keyof ConfigDTO
 
 @Injectable()
 export class ConfigService extends NestConfigService<ConfigDTO, true> {
-  public readonly keys: SetLikeOfKeys<ConfigDTO> = (() => {
+  public readonly keys = (() => {
     const config = this.getInternalConfigObject()
-    const keys = toSetLikeOfKeys(config)
+    const keys = toSetLikeOfKeys(config) as SetLikeOfKeys<Required<ConfigDTO>>
 
     return keys
   })()
