@@ -51,7 +51,7 @@
     "eslint": "8.55.0",
     "eslint-config-standard-with-typescript": "40.0.0",
     "eslint-plugin-import": "2.29.0",
-    "eslint-plugin-n": "16.3.1",
+    "eslint-plugin-n": "16.6.2",
     "eslint-plugin-promise": "6.1.1",
     "source-map-support": "0.5.21",
     "supertest": "6.3.3",
