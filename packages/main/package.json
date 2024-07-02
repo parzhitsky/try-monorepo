@@ -1,0 +1,29 @@
+{
+  "name": "main",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "lint": "eslint **/*.{ts,tsx}",
+    "clean": "rm -rf dist/*",
+    "resolve-path-aliases": "tsc-alias --project tsconfig.build.json",
+    "prebuild": "npm run clean",
+    "build": "tsc --project tsconfig.build.json",
+    "postbuild": "npm run resolve-path-aliases"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "@typescript-eslint/eslint-plugin": "6.13.2",
+    "@typescript-eslint/parser": "6.13.2",
+    "eslint": "8.55.0",
+    "eslint-config-standard-with-typescript": "40.0.0",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-n": "17.7.0",
+    "eslint-plugin-promise": "6.1.1",
+    "tsc-alias": "1.8.8",
+    "tsx": "4.2.0",
+    "typescript": "*",
+    "vitest": "1.0.1"
+  }
+}

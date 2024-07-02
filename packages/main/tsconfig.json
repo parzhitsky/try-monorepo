@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "references": [
+    { "path": "../shared/tsconfig.build.json" },
+  ],
+  "compilerOptions": {
+    "outDir": "dist",
+
+    // Alias
+    "baseUrl": ".",
+    "paths": {
+      "@@shared/*": ["../shared/dist/src/*"],
+      "@/*": ["./src/*"],
+    },
+  },
+}
